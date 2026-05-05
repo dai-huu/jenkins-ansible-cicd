@@ -265,6 +265,39 @@ sudo systemctl restart jenkins
    - **ID**: `github-credentials`
    - Click **Create**
 
+### Configure Disk Space Monitoring (Important!)
+
+**Why is this important?**
+- Jenkins monitors disk space and temporary space (`/tmp`) on the Jenkins node.
+- If the available free space falls below the configured threshold, Jenkins will mark the node as **offline** and refuse to run any jobs.
+- This can cause builds to be stuck with message: "Still waiting to schedule task" or "Waiting for next available executor".
+
+#### Free Temp Space Threshold
+
+**What is it?**
+- `Free Temp Space Threshold` is the **minimum free space required** in the `/tmp` directory for Jenkins to operate properly.
+- Default value: **1 GiB**.
+- If free space drops below this threshold, Jenkins automatically takes the node offline.
+
+**How to configure:**
+1. Go to **Manage Jenkins** → **Manage Nodes and Clouds** → **Built-In Node**
+2. Click **Configure** (gear icon)
+3. Scroll down to **Disk Space Monitoring Thresholds**
+4. In **Free Temp Space Threshold**, set an appropriate value:
+   - **For small servers**: Set to `400 MiB` or `500 MiB`
+   - **For medium servers**: Set to `1 GiB`
+   - **For large servers**: Set to `2 GiB`
+   - **To disable this check**: Set to `0`
+   - **To use global default**: Leave empty
+
+**Alternative: Use global setting**
+- If you want all nodes to use the same threshold, leave the field **empty** and configure it globally at **Manage Jenkins** → **Configure System** → **Disk Space Monitoring Thresholds**.
+
+**If you keep getting "disk space below threshold" errors:**
+1. **Option 1**: Reduce the threshold value (e.g., from 1 GiB to 400 MiB).
+2. **Option 2**: Increase the `/tmp` partition size on your server.
+3. **Option 3**: Disable the check by setting the value to `0` (not recommended for production).
+
 ### Create Jenkins Pipeline Job
 
 1. Access Jenkins at `http://<EC2-1-IP-or-domain>:8080`
