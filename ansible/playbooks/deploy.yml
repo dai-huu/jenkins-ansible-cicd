@@ -4,30 +4,16 @@
   become: yes
   
   vars:
-    app_image: daihuu103/django-hello-world:latest
+    app_image: daihuu103/django-hello-world
+    image_tag: latest
     app_port: 8000
   
   tasks:
     - name: Pull Docker image
-      docker_image:
-        name: "{{ app_image }}"
-        state: present
-        source: pull
-        force_source: yes
+      shell: docker pull {{ app_image }}:{{ image_tag }}
     
-    - name: Stop existing container
-      docker_container:
-        name: django-app
-        state: absent
-        force_kill: yes
-      ignore_errors: yes
+    - name: Stop and remove existing container if it exists
+      shell: docker rm -f django-app || true
     
-    - name: Run Django container
-      docker_container:
-        name: django-app
-        image: "{{ app_image }}"
-        state: started
-        restart_policy: always
-        recreate: yes
-        ports:
-          - "{{ app_port }}:8000"
+    - name: Run Docker container
+      shell: docker run -d --name django-app -p {{ app_port }}:8000 {{ app_image }}:{{ image_tag }}
