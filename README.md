@@ -334,7 +334,7 @@ sudo systemctl restart jenkins
 
 1. Go to GitHub repo → **Settings** → **Webhooks**
 2. Click **Add webhook**
-3. **Payload URL**: `http://<EC2-1-IP-or-domain>:8080/github-webhook/`
+3. **Payload URL**: `http://<EC2-1-IP-or-domain>:8080/github-webhook/` (Note: The trailing slash / is required)
 4. **Content type**: `application/json`
 5. **Events**: Select **Push events**
 6. Click **Add webhook**

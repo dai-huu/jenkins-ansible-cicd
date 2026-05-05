@@ -30,9 +30,6 @@ pipeline {
         }
         
         stage('Deploy with Ansible') {
-            when {
-                branch 'main'
-            }
             steps {
                 sh 'ansible-playbook -i ansible/inventory/hosts.yml ansible/playbooks/deploy.yml'
             }
