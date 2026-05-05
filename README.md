@@ -1,6 +1,6 @@
-# Jenkins + Ansible CI/CD Project
+# Jenkins + Ansible CI/CD (build and deploy) Project
 
-A comprehensive CI/CD pipeline project demonstrating Jenkins + Ansible + Docker + Django integration.
+A CI/CD (build and deploy) Project demonstrating Jenkins + Ansible + Docker + Django integration.
 
 ## Architecture
 
@@ -41,9 +41,7 @@ jenkins-ansible-cicd/
 ├── README.md                   # This file
 │
 ├── src/                        # Django application
-│   ├── manage.py
-│   ├── helloworld/             # Django project config
-│   └── app/                    # Django app
+│   
 │
 ├── ansible/                    # Ansible deployment
 │   ├── inventory/
@@ -51,8 +49,10 @@ jenkins-ansible-cicd/
 │   └── playbooks/
 │       └── deploy.yml          # Deploy with Docker
 │
+├── ansible.cfg                 # Ansible defaults (e.g., host key checking)
+│
 └── images/                     # Documentation images
-    └── cicd-pipeline.png       # CI/CD architecture diagram
+    └── cicd-pipeline.jpg       # CI/CD architecture diagram
 ```
 
 ## Quick Start
@@ -81,9 +81,6 @@ Access: http://localhost:8000/
 ### Deploy with Ansible
 
 ```bash
-# Edit inventory first
-vim ansible/inventory/hosts.yml
-
 # Run deployment
 ansible-playbook -i ansible/inventory/hosts.yml ansible/playbooks/deploy.yml
 ```
@@ -91,7 +88,7 @@ ansible-playbook -i ansible/inventory/hosts.yml ansible/playbooks/deploy.yml
 ## EC2 Setup Instructions
 
 ### EC2 #1 (Jenkins + Ansible Server)
-For Jenkins installation reference : https://www.jenkins.io/doc/tutorials/tutorial-for-installing-jenkins-on-AWS/
+For Jenkins installation reference : https://www.jenkins.io/doc/tutorials/tutorial-for-installing-jenkins-on-AWS/ <br>
 For Docker installation reference : https://docs.aws.amazon.com/serverless-application-model/latest/developerguide/install-docker.html
 
 ```bash
@@ -374,12 +371,4 @@ The `deploy.yml` playbook handles:
 - Jenkins (for CI/CD)
 - Git
 
-## Environment Variables
 
-Create `.env` file for sensitive data:
-
-```bash
-SECRET_KEY=your-secret-key
-DEBUG=False
-ALLOWED_HOSTS=your-domain.com
-```
