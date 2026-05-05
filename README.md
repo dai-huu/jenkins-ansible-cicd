@@ -166,37 +166,38 @@ You should see the following output, confirming that Docker is installed and run
 ```
 
 **Ensure SSH Access:**
-- EC2 #1 must be able to SSH to EC2 #2 without password
+- EC2 #1 must be able to SSH to EC2 #2
 - Copy public key from EC2 #1 to EC2 #2:
 
-#### Step 1: Generate SSH Key on EC2 #1
+#### Step 1: Generate SSH Key for Jenkins User on EC2 #1
 
 ```bash
-# On EC2 #1 (create ssh key for Ansible's connection to EC2 #2):
-ssh-keygen -t rsa -N "" -f ~/.ssh/deploy-server
+# On EC2 #1 - Create SSH key for Jenkins user to authenticate with EC2 #2
+sudo -u jenkins ssh-keygen -t rsa -f /var/lib/jenkins/.ssh/django-web-server -N ""
 
-# Display public key (you'll need this)
-cat ~/.ssh/deploy-server.pub
+# Display public key (you'll need this for EC2 #2)
+sudo cat /var/lib/jenkins/.ssh/django-web-server.pub
 ```
+
+**Important:** The `-u jenkins` flag ensures the key is created under the Jenkins user's home directory (`/var/lib/jenkins/.ssh/`) so that Jenkins can use it when running Ansible playbooks.
 
 #### Step 2: Copy Public Key to EC2 #2
-1. Get the public key content:
+1. Get the public key content from EC2 #1:
 ```bash
 # On EC2 #1:
-cat ~/.ssh/deploy-server.pub
+sudo cat /var/lib/jenkins/.ssh/django-web-server.pub
 ```
 
-2. Copy the output, then on EC2 #2 (via AWS Console EC2 Instance Connect):
+2. Copy the output, then on EC2 #2 (via AWS Console EC2 Instance Connect or SSH):
 ```bash
 # On EC2 #2:
-mkdir -p ~/.ssh
-chmod 700 ~/.ssh
+mkdir -p ~/.ssh (optional if .ssh doesn't exist)
+chmod 700 ~/.ssh (optional if .ssh doesn't exist)
 
-# Paste the public key content below
-echo "<paste-public-key-content-here>" >> ~/.ssh/authorized_keys
+# Paste the public key content below (from Jenkins user on EC2 #1)
+echo "<paste-django-web-server-public-key-here>" >> ~/.ssh/authorized_keys
 chmod 600 ~/.ssh/authorized_keys
 ```
-
 
 ## CI/CD Pipeline (Jenkins)
 
@@ -353,7 +354,7 @@ all:
     web_server:
       ansible_host: <EC2-2-IP-or-domain>
       ansible_user: ec2-user
-      ansible_ssh_private_key_file: ~/.ssh/deploy-server
+      ansible_ssh_private_key_file: ~/.ssh/django-web-server
 ```
 
 **Replace `<EC2-2-IP-or-domain>` with the actual IP address or domain name of EC2 #2**
