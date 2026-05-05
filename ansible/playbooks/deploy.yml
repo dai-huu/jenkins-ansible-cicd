@@ -1,7 +1,7 @@
 ---
 - name: Deploy Django Application
   hosts: webserver
-  # become: yes
+  become: yes
   
   vars:
     app_image: daihuu103/django-hello-world:latest
