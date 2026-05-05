@@ -36,8 +36,9 @@ pipeline {
         }
     }
     
+    // post actions to clean up workspace after successful build
     post {
-        always {
+        success {
             cleanWs()
         }
     }
