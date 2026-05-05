@@ -4,7 +4,7 @@
   become: yes
   
   vars:
-    app_image: django-hello-world:latest
+    app_image: daihuu103/django-hello-world:latest
     app_port: 8000
   
   tasks:
