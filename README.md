@@ -363,12 +363,5 @@ The `deploy.yml` playbook handles:
 - Stop old container (if exists)
 - Run new container with auto-restart on port 8000
 
-## Requirements
-
-- Python 3.9+
-- Docker
-- Ansible 2.9+
-- Jenkins (for CI/CD)
-- Git
 
 
